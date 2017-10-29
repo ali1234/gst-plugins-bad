@@ -750,13 +750,13 @@ case $host in
         LIBS="$LIBS -lbcm_host"
         AC_CHECK_HEADER(bcm_host.h,
           [
-            LIBS="$LIBS -lGLESv2"
-            AC_CHECK_LIB([EGL], [eglGetProcAddress],
+            LIBS="$LIBS -lbrcmGLESv2"
+            AC_CHECK_LIB([brcmEGL], [eglGetProcAddress],
               [
-                LIBS="$LIBS -lEGL"
+                LIBS="$LIBS -lbrcmEGL"
                 AC_CHECK_HEADER([EGL/egl.h],
                   [
-                    AC_CHECK_LIB([GLESv2], [glEnable],
+                    AC_CHECK_LIB([brcmGLESv2], [glEnable],
                       [
                         AC_CHECK_HEADER([GLES2/gl2.h],
                           [
@@ -1042,6 +1042,8 @@ case $host in
     if test "x$HAVE_EGL_RPI" = "xyes"; then
       if test "x$NEED_DISPMANX" != "xno"; then
         HAVE_WINDOW_DISPMANX=yes
+        GL_LIBS="-lbrcmGLESv2 -lbrcmEGL $EGL_LIBS"
+        GL_CFLAGS="$GL_CFLAGS $EGL_CFLAGS"
         USE_EGL=yes
       fi
     fi
@@ -1053,7 +1055,7 @@ case $host in
       fi
     else
       if test "x$NEED_EGL" != "xno"; then
-        if test "x$HAVE_WINDOW_WAYLAND" = "xyes" -o "x$HAVE_WINDOW_X11" = "xyes" -o "x$HAVE_WINDOW_DISPMANX" = "xyes" -o "x$HAVE_WINDOW_VIV_FB" = "xyes"; then
+        if test "x$HAVE_WINDOW_WAYLAND" = "xyes" -o "x$HAVE_WINDOW_X11" = "xyes" -o "x$HAVE_WINDOW_VIV_FB" = "xyes"; then
           GL_LIBS="$GL_LIBS -lEGL $EGL_LIBS"
           GL_CFLAGS="$GL_CFLAGS $EGL_CFLAGS"
           USE_EGL=yes
